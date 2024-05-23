@@ -1,0 +1,54 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DB_URL") // uses connection pooling
+    //   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+}
+
+model Users {
+    id       String @unique @default(uuid())
+    usernmae String @unique
+    email    String @unique
+    password String
+    role     Role
+}
+
+model Location {
+    id     String   @unique() @default(uuid())
+    name   String
+    events Events[]
+}
+model Category{
+    id String @unique @default(uuid())
+    name String
+    events Events[]
+}
+model Events {
+    id          String       @unique @default(uuid())
+    name        String
+    description String
+    date        DateTime
+    location    Location     @relation(fields: [locationId], references: [id])
+    locationId  String
+    createdAt   DateTime     @default(now())
+    venue       String
+    category    Category @relation(fields: [categoryId],references: [id])
+    categoryId String 
+    priceclass  PriceClass[]
+}
+
+model PriceClass {
+    id      String @unique() @default(uuid())
+    name    String
+    price   Float
+    event   Events @relation(fields: [eventId], references: [id])
+    eventId String
+}
+
+enum Role {
+    ADMIN
+    USER
+}

@@ -4,51 +4,19 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenuTrigger, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem, DropdownMenuContent, DropdownMenu } from "@/components/ui/dropdown-menu"
 import { CarouselItem, CarouselContent, CarouselPrevious, CarouselNext, Carousel } from "@/components/ui/carousel"
 import { CardContent, Card } from "@/components/ui/card"
+import { useRouter } from "next/router"
+import HomeCards from "@/components/HomeCards"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/lib/authOptions"
+import { redirect } from "next/navigation"
 
-export default function Home() {
+export default async function Home() {
+  // const session = await getServerSession(authOptions);
+  // if (!session) {
+  //   return redirect("/auth")
+  // }
   return (
     <>
-      <header className="w-full bg-gray-900 text-gray-50 dark:bg-gray-950 dark:text-gray-50 shadow-md">
-        <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-          <div className="flex items-center space-x-4">
-            <Link className="flex items-center gap-2" href="#">
-              <MountainIcon className="h-6 w-6" />
-              <span className="font-medium text-lg">Acme Events</span>
-            </Link>
-          </div>
-          <div className="flex items-center space-x-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="rounded-full" size="icon" variant="ghost">
-                  <img
-                    alt="Avatar"
-                    className="rounded-full"
-                    height="36"
-                    src="/placeholder.svg"
-                    style={{
-                      aspectRatio: "36/36",
-                      objectFit: "cover",
-                    }}
-                    width="36"
-                  />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <Button className="px-6 py-2 text-lg font-medium" size="md" variant="solid">
-              Sign Up
-            </Button>
-          </div>
-        </div>
-      </header>
       <main>
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
@@ -62,12 +30,9 @@ export default function Home() {
                   experiences.
                 </p>
                 <div className="flex flex-col gap-4 sm:flex-row">
-                  <Button className="px-6 py-2 text-lg font-medium" size="md" variant="solid">
+                  <Link href={"/all-events"} className="px-6 py-2 text-lg font-medium">
                     Explore Events
-                  </Button>
-                  <Button className="px-6 py-2 text-lg font-medium" size="md" variant="outline">
-                    Learn More
-                  </Button>
+                  </Link>
                 </div>
               </div>
               <div>
@@ -119,93 +84,9 @@ export default function Home() {
                 </p>
               </div>
               <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:gap-12">
-                <Card className="overflow-hidden rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-2xl">
-                  <img
-                    alt="Event Image"
-                    className="aspect-[4/3] w-full object-cover"
-                    height="240"
-                    src="/placeholder.svg"
-                    width="360"
-                  />
-                  <CardContent className="space-y-4 p-6">
-                    <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
-                      Corporate Event
-                    </div>
-                    <h3 className="text-2xl font-bold">Annual Sales Conference</h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Join us for our annual sales conference to network, learn, and grow your business.
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">June 15, 2023</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <LocateIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">New York, NY</span>
-                    </div>
-                    <Button className="w-full" size="md" variant="solid">
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
-                <Card className="overflow-hidden rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-2xl">
-                  <img
-                    alt="Event Image"
-                    className="aspect-[4/3] w-full object-cover"
-                    height="240"
-                    src="/placeholder.svg"
-                    width="360"
-                  />
-                  <CardContent className="space-y-4 p-6">
-                    <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
-                      Wedding
-                    </div>
-                    <h3 className="text-2xl font-bold">Elegant Garden Wedding</h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Celebrate the union of two souls in a beautiful garden setting.
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">July 1, 2023</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <LocateIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">San Francisco, CA</span>
-                    </div>
-                    <Button className="w-full" size="md" variant="solid">
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
-                <Card className="overflow-hidden rounded-xl shadow-lg transition-all hover:scale-105 hover:shadow-2xl">
-                  <img
-                    alt="Event Image"
-                    className="aspect-[4/3] w-full object-cover"
-                    height="240"
-                    src="/placeholder.svg"
-                    width="360"
-                  />
-                  <CardContent className="space-y-4 p-6">
-                    <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
-                      Fundraiser
-                    </div>
-                    <h3 className="text-2xl font-bold">Charity Gala Dinner</h3>
-                    <p className="text-gray-500 dark:text-gray-400">
-                      Join us for an elegant evening of fine dining and entertainment to support a great cause.
-                    </p>
-                    <div className="flex items-center space-x-2">
-                      <CalendarDaysIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">September 1, 2023</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <LocateIcon className="h-5 w-5 text-gray-500 dark:text-gray-400" />
-                      <span className="text-sm text-gray-500 dark:text-gray-400">Chicago, IL</span>
-                    </div>
-                    <Button className="w-full" size="md" variant="solid">
-                      Learn More
-                    </Button>
-                  </CardContent>
-                </Card>
+                <HomeCards />
+                <HomeCards />
+                <HomeCards />
               </div>
             </div>
           </div>
@@ -274,57 +155,57 @@ function AwardIcon(props) {
 }
 
 
-function CalendarDaysIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M8 2v4" />
-      <path d="M16 2v4" />
-      <rect width="18" height="18" x="3" y="4" rx="2" />
-      <path d="M3 10h18" />
-      <path d="M8 14h.01" />
-      <path d="M12 14h.01" />
-      <path d="M16 14h.01" />
-      <path d="M8 18h.01" />
-      <path d="M12 18h.01" />
-      <path d="M16 18h.01" />
-    </svg>
-  )
-}
+// function CalendarDaysIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <path d="M8 2v4" />
+//       <path d="M16 2v4" />
+//       <rect width="18" height="18" x="3" y="4" rx="2" />
+//       <path d="M3 10h18" />
+//       <path d="M8 14h.01" />
+//       <path d="M12 14h.01" />
+//       <path d="M16 14h.01" />
+//       <path d="M8 18h.01" />
+//       <path d="M12 18h.01" />
+//       <path d="M16 18h.01" />
+//     </svg>
+//   )
+// }
 
 
-function LocateIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <line x1="2" x2="5" y1="12" y2="12" />
-      <line x1="19" x2="22" y1="12" y2="12" />
-      <line x1="12" x2="12" y1="2" y2="5" />
-      <line x1="12" x2="12" y1="19" y2="22" />
-      <circle cx="12" cy="12" r="7" />
-    </svg>
-  )
-}
+// function LocateIcon(props) {
+//   return (
+//     <svg
+//       {...props}
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="24"
+//       height="24"
+//       viewBox="0 0 24 24"
+//       fill="none"
+//       stroke="currentColor"
+//       strokeWidth="2"
+//       strokeLinecap="round"
+//       strokeLinejoin="round"
+//     >
+//       <line x1="2" x2="5" y1="12" y2="12" />
+//       <line x1="19" x2="22" y1="12" y2="12" />
+//       <line x1="12" x2="12" y1="2" y2="5" />
+//       <line x1="12" x2="12" y1="19" y2="22" />
+//       <circle cx="12" cy="12" r="7" />
+//     </svg>
+//   )
+// }
 
 
 function MountainIcon(props) {

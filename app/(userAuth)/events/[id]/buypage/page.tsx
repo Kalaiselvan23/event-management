@@ -1,16 +1,12 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/yN1tingmEQ7
- * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
- */
 import { CardTitle, CardDescription, CardHeader, CardContent, Card, CardFooter } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { RadioGroupItem, RadioGroup } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-
-export default function Component() {
+import { fetchEvent } from "../page"
+export default async function Component({params}:any) {
+  const event=await fetchEvent(params.id);
   return (
     <div className="mx-auto max-w-2xl space-y-6">
       <Card>
@@ -74,15 +70,15 @@ export default function Component() {
           <div className="grid gap-4">
             <div className="flex items-center justify-between">
               <span>Event Name</span>
-              <span className="font-medium">Annual Conference</span>
+              <span className="font-medium">{event.name}</span>
             </div>
             <div className="flex items-center justify-between">
               <span>Date</span>
-              <span className="font-medium">June 15, 2024</span>
+              <span className="font-medium">{event.date}</span>
             </div>
             <div className="flex items-center justify-between">
               <span>Location</span>
-              <span className="font-medium">San Francisco, CA</span>
+              <span className="font-medium">{event.venue}</span>
             </div>
             <Separator />
             <div className="flex items-center justify-between">

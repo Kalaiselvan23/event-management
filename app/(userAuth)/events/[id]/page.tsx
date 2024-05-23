@@ -1,8 +1,17 @@
 
 import { Button } from "@/components/ui/button"
 import { AvatarImage, AvatarFallback, Avatar } from "@/components/ui/avatar"
-
-export default function Component() {
+import Link from "next/link";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/authOptions";
+import { redirect } from "next/navigation";
+export const fetchEvent=async(id:string)=>{
+  const res=await fetch(`http://localhost:3000/api/events/${id}`)
+  const data=await res.json();
+  return data[0];
+}
+export default async function Component({params}:any) {
+  const event=await fetchEvent(params.id);
   return (
     <>
       <section className="w-full py-12 md:py-24 lg:py-32 bg-gray-100 dark:bg-gray-800">
@@ -11,22 +20,20 @@ export default function Component() {
             <div className="flex flex-col justify-center space-y-4">
               <div className="space-y-2">
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
-                  Annual Developer Conference
+                 {event.name}
                 </h1>
-                <p className="text-gray-500 md:text-xl dark:text-gray-400">June 15-17, 2024 | San Francisco, CA</p>
+                <p className="text-gray-500 md:text-xl dark:text-gray-400">{event.date} | {`${event.venue} , ${event.locationName}`}</p>
               </div>
               <div className="space-y-4">
                 <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">
                   Event Details
                 </div>
                 <p className="text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
-                  Our annual developer conference is the premier event for technologists, designers, and product
-                  leaders. Expect inspiring keynotes, hands-on workshops, and plenty of networking opportunities.
+                  {event.description}
                 </p>
               </div>
               <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                <Button variant="primary">Register Now</Button>
-                <Button variant="outline">Learn More</Button>
+                <Link href={`${params.id}/buypage`}>Register Now</Link>
               </div>
             </div>
             <img
