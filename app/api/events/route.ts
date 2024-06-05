@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
+import { formatDate } from '../../../lib/utils';
 export const GET = async (request: NextApiRequest) => {
   try {
     const data =await prisma.$queryRaw`select "Events".*,"Location".name as "locationName" from "Events" inner join "Location" on "Events"."locationId"="Location".id;`;
@@ -14,14 +15,8 @@ export const GET = async (request: NextApiRequest) => {
 export const POST = async (request: Request) => {
   try {
     const { categoryId, fromDate, toDate } = await request.json();
-    const formattedFromDate = new Date(fromDate)
-      .toISOString()
-      .replace("T", " ")
-      .replace("Z", "");
-    const formattedToDate = new Date(toDate)
-      .toISOString()
-      .replace("T", " ")
-      .replace("Z", "");
+    const formattedFromDate = formatDate(fromDate)
+    const formattedToDate = formatDate(toDate);
     const events = await prisma.$queryRaw`SELECT * FROM "Events"
       WHERE "categoryId" = ${categoryId}
       AND "date" > timestamp '${formattedFromDate}' AND "date" < timestamp'${formattedToDate}'`;

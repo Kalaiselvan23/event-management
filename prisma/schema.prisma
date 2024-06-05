@@ -8,12 +8,66 @@ datasource db {
     //   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
-model Users {
-    id       String @unique @default(uuid())
-    usernmae String @unique
-    email    String @unique
-    password String
-    role     Role
+model User {
+    id            String          @id @default(uuid())
+    name          String
+    email         String?         @unique
+    password      String?
+    emailVerified DateTime?       @map("email_verified")
+    image         String?
+    createdAt     DateTime        @default(now())
+    updatedAt     DateTime        @updatedAt
+    accounts      Account[]
+    sessions      Session[]
+    Ticket        Ticket[]
+    events        UsersOnEvents[]
+    role        Role @default(USER)
+
+    @@map("users")
+}
+
+model Account {
+    id                String   @id @default(cuid())
+    userId            String   @map("user_id")
+    type              String?
+    provider          String
+    providerAccountId String   @map("provider_account_id")
+    token_type        String?
+    refresh_token     String?  @db.Text
+    access_token      String?  @db.Text
+    expires_at        Int?
+    scope             String?
+    id_token          String?  @db.Text
+    createdAt         DateTime @default(now())
+    updatedAt         DateTime @updatedAt
+    user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@unique([provider, providerAccountId])
+    @@map("accounts")
+}
+
+model Session {
+    id           String   @id @default(cuid())
+    userId       String?  @map("user_id")
+    sessionToken String   @unique @map("session_token") @db.Text
+    accessToken  String?  @map("access_token") @db.Text
+    expires      DateTime
+    user         User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    createdAt    DateTime @default(now())
+    updatedAt    DateTime @updatedAt
+
+    @@map("sessions")
+}
+
+model VerificationRequest {
+    id         String   @id @default(cuid())
+    identifier String
+    token      String   @unique
+    expires    DateTime
+    createdAt  DateTime @default(now())
+    updatedAt  DateTime @updatedAt
+
+    @@unique([identifier, token])
 }
 
 model Location {
@@ -21,23 +75,47 @@ model Location {
     name   String
     events Events[]
 }
-model Category{
-    id String @unique @default(uuid())
-    name String
-    events Events[]
+
+model Category {
+    id     String             @unique @default(uuid())
+    name   String
+    events EventsOnCategory[]
 }
+
 model Events {
-    id          String       @unique @default(uuid())
+    id          String             @unique @default(uuid())
     name        String
     description String
     date        DateTime
-    location    Location     @relation(fields: [locationId], references: [id])
+    location    Location           @relation(fields: [locationId], references: [id])
     locationId  String
-    createdAt   DateTime     @default(now())
+    createdAt   DateTime           @default(now())
     venue       String
-    category    Category @relation(fields: [categoryId],references: [id])
-    categoryId String 
+    category    EventsOnCategory[]
+    categoryId  String
+    Ticket      Ticket[]
     priceclass  PriceClass[]
+    users       UsersOnEvents[]
+}
+
+model EventsOnCategory {
+    events     Events   @relation(references: [id], fields: [eventId])
+    eventId    String
+    category   Category @relation(fields: [categoryId], references: [id])
+    categoryId String
+
+    @@id([categoryId, eventId])
+}
+
+model UsersOnEvents {
+    users        User     @relation(references: [id], fields: [userId])
+    userId       String
+    events       Events   @relation(references: [id], fields: [eventId])
+    eventId      String
+    regesteredAt DateTime @default(now())
+    paidAt       DateTime @default(now())
+
+    @@id([userId, eventId])
 }
 
 model PriceClass {
@@ -46,6 +124,18 @@ model PriceClass {
     price   Float
     event   Events @relation(fields: [eventId], references: [id])
     eventId String
+}
+
+model Ticket {
+    id           String
+    userId       String
+    eventId      String
+    priceClassId String
+    purchaseDate DateTime @default(now())
+    user         User     @relation(fields: [userId], references: [id])
+    event        Events   @relation(fields: [eventId], references: [id])
+
+    @@id([userId, eventId])
 }
 
 enum Role {
