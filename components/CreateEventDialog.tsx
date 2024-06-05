@@ -68,6 +68,7 @@ const CreateEventDialog = ({ type }: { type: string }) => {
         <DialogHeader>
           <DialogTitle>{type === "EDIT" ? "Edit Event" : "Create Event"}</DialogTitle>
           <DialogDescription>Fill out the details for your new event.</DialogDescription>
+          <DialogDescription>Fill out the details for your new event.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit, onErrors)}>
           <div className="grid gap-4 py-4">

@@ -7,23 +7,24 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover"
 import AdminHeader from '@/components/AdminHeader';
 import AdminSidebar from "@/components/AdminSidebar"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue,SelectGroup,SelectLabel} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue, SelectGroup, SelectLabel } from "@/components/ui/select"
 import { DropdownMenuRadioGroup, DropdownMenuRadioItem } from "@/components/ui/dropdown-menu"
 import { Label } from "@/components/ui/label"
 import { PlusIcon, FilterIcon, ListIcon } from "@/components/icons"
 import { Textarea } from "@/components/ui/textarea"
 import { Calendar } from "@/components/ui/calendar"
-import { Dialog,DialogHeader,DialogContent,DialogDescription,DialogTitle,DialogTrigger,DialogFooter } from "@/components/ui/dialog"
+import { Dialog, DialogHeader, DialogContent, DialogDescription, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
 import CreateEventDialog from "@/components/CreateEventDialog"
 import { EventType } from "@/lib/types"
+import { DeleteDialog } from "@/components/DeleteDialog"
 export default async function Component() {
-  const eventsResponse = await fetch("http://localhost:3000/api/events",{
-    next:{
-      revalidate:2
+  const eventsResponse = await fetch("http://localhost:3000/api/events", {
+    next: {
+      revalidate:0
     }
   });
   const events = await eventsResponse.json();
-  const handleSubmit=(event)=>{
+  const handleSubmit = (event) => {
     console.log(event.target.value)
   }
   return (
@@ -116,7 +117,7 @@ export default async function Component() {
               </div>
             </PopoverContent>
           </Popover>
-          <Popover> 
+          <Popover>
             <PopoverTrigger asChild>
               <Button className="flex items-center gap-2" variant="outline">
                 <ListIcon className="h-4 w-4" />
@@ -132,7 +133,7 @@ export default async function Component() {
               </DropdownMenuRadioGroup>
             </PopoverContent>
           </Popover>
-         <CreateEventDialog type="CREATE"/>
+          <CreateEventDialog type="CREATE" />
         </div>
         <Table>
           <TableHeader>
@@ -146,103 +147,24 @@ export default async function Component() {
             </TableRow>
           </TableHeader>
           <TableBody>
-          {events.map((event:EventType)=>{
-          return <TableRow key={event.id}>
-              <TableCell className="font-medium">{event.name}</TableCell>
-              <TableCell>{new Date(event.date).toString()}</TableCell>
-              <TableCell>1,024</TableCell>
-              <TableCell>980</TableCell>
-              <TableCell>$98,000</TableCell>
-              <TableCell className="flex gap-2">
-                
-                  <CreateEventDialog type="EDIT"/>
-                  <Button>Delete</Button>
-              
-              </TableCell>
-            </TableRow>
-          })}
+            {events.map((event: EventType) => {
+              return <TableRow key={event.id}>
+                <TableCell className="font-medium">{event.name}</TableCell>
+                <TableCell>{new Date(event.date).toString()}</TableCell>
+                <TableCell>1,024</TableCell>
+                <TableCell>980</TableCell>
+                <TableCell>$98,000</TableCell>
+                <TableCell className="flex gap-2">
+                  <CreateEventDialog type="EDIT" />
+                  <DeleteDialog data={event} />
+                </TableCell>
+              </TableRow>
+            })}
           </TableBody>
         </Table>
       </div>
-      {/* <div className="border shadow-sm rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Tickets</TableHead>
-              <TableHead>Checked In</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">John Doe</TableCell>
-              <TableCell>john@example.com</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>Yes</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Jane Smith</TableCell>
-              <TableCell>jane@example.com</TableCell>
-              <TableCell>1</TableCell>
-              <TableCell>No</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Bob Johnson</TableCell>
-              <TableCell>bob@example.com</TableCell>
-              <TableCell>3</TableCell>
-              <TableCell>Yes</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Alice Williams</TableCell>
-              <TableCell>alice@example.com</TableCell>
-              <TableCell>1</TableCell>
-              <TableCell>Yes</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Tom Davis</TableCell>
-              <TableCell>tom@example.com</TableCell>
-              <TableCell>2</TableCell>
-              <TableCell>No</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div>
-      <div className="border shadow-sm rounded-lg">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Event</TableHead>
-              <TableHead>Ticket Type</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Quantity</TableHead>
-              <TableHead>Revenue</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium">Annual Conference 2023</TableCell>
-              <TableCell>Early Bird</TableCell>
-              <TableCell>$99</TableCell>
-              <TableCell>500</TableCell>
-              <TableCell>$49,500</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Annual Conference 2023</TableCell>
-              <TableCell>Regular</TableCell>
-              <TableCell>$149</TableCell>
-              <TableCell>480</TableCell>
-              <TableCell>$71,520</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium">Product Launch Event</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </div> */}
     </main>
 
-    // </div>
   )
 }
 

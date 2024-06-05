@@ -5,7 +5,7 @@ generator client {
 datasource db {
     provider = "postgresql"
     url      = env("DB_URL") // uses connection pooling
-    //   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+
 }
 
 model User {
@@ -122,7 +122,7 @@ model PriceClass {
     id      String @unique() @default(uuid())
     name    String
     price   Float
-    event   Events @relation(fields: [eventId], references: [id])
+    event   Events @relation(fields: [eventId], references: [id],onDelete: Cascade)
     eventId String
 }
 

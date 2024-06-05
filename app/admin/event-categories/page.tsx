@@ -6,6 +6,7 @@ import { useEffect, useState } from "react"
 import { CategoryType } from "@/lib/types"
 import { api } from "@/lib/axios"
 import CreateCategoryDialog from "@/components/CreateCategoryDialog"
+import { DeleteDialog } from "@/components/DeleteDialog"
 const Page = async () => {
   const res = await fetch("http://localhost:3000/api/category")
   const categories: CategoryType[] = await res.json();
@@ -31,10 +32,7 @@ const Page = async () => {
               <TableCell>
                 <div className="flex items-center gap-2">
                   <CreateCategoryDialog />
-                  <Button color="red" size="sm" variant="outline">
-                    <TrashIcon className="h-4 w-4" />
-                    Delete
-                  </Button>
+                  <DeleteDialog/>
                 </div>
               </TableCell>
             </TableRow>

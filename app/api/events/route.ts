@@ -27,3 +27,21 @@ export const POST = async (request: Request) => {
     });
   }
 };
+
+export const DELETE=async(request:Request)=>{
+  try{
+    const {id}=await request.json();
+    console.log(id)
+    const event=await prisma.events.delete({
+      where:{
+        id
+      }
+    })
+    console.log(event)
+    return Response.json({msg:"Event Deleted Successfully",data:event})
+  }
+  catch(err)
+  {
+    return Response.json(err,{status:500});
+  }
+}
