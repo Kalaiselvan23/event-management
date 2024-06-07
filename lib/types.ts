@@ -1,4 +1,5 @@
 import {string, z} from "zod"
+const paymentEnum=z.enum(["CC","PAYPAL","APPLEPAY"])
 export const EventSchema=z.object({
     id:z.string().uuid().optional(),
     name:z.string(),
@@ -22,7 +23,16 @@ export const LocationSchema=z.object({
     id:z.string().uuid().optional(),
     name:z.string().min(2,"Name should be more than 2 characters").max(20,"Name should not be more than 20 characters"),
 })
+export const PaymentSchema=z.object({
+    id:z.string().uuid().optional(),
+    name:z.string().min(2,"Name should be more than 2 characters").max(20,"Name should not be more than 20 characters"),
+    email:z.string().email(),
+    paymentMethod:paymentEnum,
+    eventId:z.string().uuid(),
+    ticketPrice:z.number(),
+})
 //ts exports
 export type EventType=z.infer<typeof EventSchema>
 export type CategoryType=z.infer<typeof CategorySchema>
 export type LocationType=z.infer<typeof LocationSchema>
+export type PaymentType=z.infer<typeof PaymentSchema>

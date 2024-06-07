@@ -91,8 +91,7 @@ model Events {
     locationId  String
     createdAt   DateTime           @default(now())
     venue       String
-    category    EventsOnCategory[]
-    categoryId  String
+    categories    EventsOnCategory[]
     Ticket      Ticket[]
     priceclass  PriceClass[]
     users       UsersOnEvents[]

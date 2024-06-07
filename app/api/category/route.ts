@@ -4,15 +4,19 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
-    //const categories:CategoryType[]=await prisma.$queryRaw`select * from "Category"`
     const categories: CategoryType[] = await prisma.category.findMany({
-        include:{
+      include:{
+        events:{
+          include:{
             events:{
-                include:{
-                    events:true,
-                }
+              select:{
+                name:true,
+                id:true,
+              }
             }
+          }
         }
+      }
     });
     console.log(categories);
     return NextResponse.json(categories);
