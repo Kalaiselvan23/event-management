@@ -98,9 +98,9 @@ model Events {
 }
 
 model EventsOnCategory {
-    events     Events   @relation(references: [id], fields: [eventId])
+    events     Events   @relation(references: [id], fields: [eventId],onDelete: Cascade,onUpdate: Cascade)
     eventId    String
-    category   Category @relation(fields: [categoryId], references: [id])
+    category   Category @relation(fields: [categoryId], references: [id],onDelete: Cascade,onUpdate: Cascade)
     categoryId String
 
     @@id([categoryId, eventId])
