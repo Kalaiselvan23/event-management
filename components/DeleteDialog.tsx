@@ -12,25 +12,21 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { CategoryType, EventType } from "@/lib/types"
+import { deleteFromApi } from "@/lib/utils"
 import { error } from "console"
+import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
-const deleteEvent = async (eventId: string) => {
-  const res = await fetch('/api/events', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      id: eventId
-    }),
-  })
-  const response = await res.json();
-  if (response.err) {
-    toast.error(response.err);
+
+export function DeleteDialog({ data, url }: { data: CategoryType | EventType, url: string }) {
+  const router=useRouter();
+  const deleteEvent = async (id: string, url: string) => {
+    const response = await deleteFromApi(id, url)
+    if (response.err) {
+      toast.error(response.err);
+    }
+    toast.success(response.msg);
+    window.location.reload();
   }
-  toast.success(response.msg)
-}
-export function DeleteDialog({ data }: { data: CategoryType | EventType }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -45,7 +41,7 @@ export function DeleteDialog({ data }: { data: CategoryType | EventType }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteEvent(data?.id)}>Delete</AlertDialogAction>
+          <AlertDialogAction onClick={() => deleteEvent(data?.id, url)}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

@@ -17,45 +17,56 @@ import { cn } from '@/lib/utils';
 import { api } from '@/lib/axios';
 import { format } from 'date-fns';
 import toast, { ToastBar, Toaster } from "react-hot-toast"
-
-const CreateEventDialog = ({ type }: { type: string }) => {
+import EventFilterBox from './EventFilterBox';
+type propsType = {
+  type: "CREATE" | "EDIT",
+  locations: LocationType[],
+  categories: CategoryType[],
+  event?: EventType,
+}
+const CreateEventDialog = ({ locations, categories, type, event }: propsType) => {
+  console.log("locations",locations);
+  console.log("categories",categories)
   const { register, handleSubmit, watch, control, formState: { errors } } = useForm<EventType>({
-    resolver: zodResolver(EventSchema)
+    resolver: zodResolver(EventSchema),
+    defaultValues: {
+      date: event?.date,
+      name: event?.name,
+      venue: event?.venue,
+      locationId: event?.locationId,
+      categoryId: event?.categoryId,
+      description: event?.description,
+    }
   });
-  const [categories, setCategories] = useState<CategoryType[]>([]);
-  const [locations, setLocations] = useState<LocationType[]>([])
   const [openDialog, setOpenDialog] = useState<boolean>(false);
-  useEffect(() => {
-    api.get('/category')
-      .then((res) => {
-        setCategories(res.data);
-      });
-    api.get('/location')
-      .then(res => {
-        setLocations(res.data);
-      })
-  }, []);
-  // const notify = () => {
-  //   toast.success('Successfully toasted!')
-  // }
   const onSubmit: SubmitHandler<EventType> = async (data: EventType) => {
     data.date = new Date(data.date);
-    console.log(data.date);
-    console.log('form submitted');
-    const res = await api.post('/events/create', data)
-    const responseData = await res.data
-    console.log("resopons data", responseData);
-    if (responseData.err) {
-      console.log(responseData.err)
-      toast.error(responseData.err);
+    if (event) {
+      const res = await api.put(`/events/update?eventId=${event.id}`,data)
+      const responseData = await res.data
+      if (responseData.err) {
+        toast.error(responseData.err);
+      }
+      toast.success(responseData.msg);
+      window.location.reload();
+      setOpenDialog(false);
     }
-    toast.success(responseData.msg);
-    setOpenDialog(false);
+    else {
+      const res = await api.post('/events/create', data)
+      const responseData = await res.data
+      if (responseData.err) {
+        toast.error(responseData.err)
+      }
+      toast.success(responseData.msg);
+      window.location.reload();
+      setOpenDialog(false);
+    }
   };
   const onErrors: any = (errors: any) => {
     console.log(errors)
   }
-  console.log(locations)
+  console.log(watch('categoryId'))
+  console.log(watch("locationId"))
   return (
     <Dialog open={openDialog} onOpenChange={setOpenDialog}>
       <DialogTrigger asChild>
@@ -67,7 +78,6 @@ const CreateEventDialog = ({ type }: { type: string }) => {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{type === "EDIT" ? "Edit Event" : "Create Event"}</DialogTitle>
-          <DialogDescription>Fill out the details for your new event.</DialogDescription>
           <DialogDescription>Fill out the details for your new event.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit, onErrors)}>
@@ -185,7 +195,7 @@ const CreateEventDialog = ({ type }: { type: string }) => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Create Event</Button>
+            <Button type="submit">{(event) ? 'Update Event' : 'Create Event'}</Button>
             <DialogClose asChild>
               <Button type="button" variant="secondary">
                 Close
