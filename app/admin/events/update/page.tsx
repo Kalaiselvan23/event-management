@@ -4,12 +4,12 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CategoryType, EventSchema, EventType } from "@/lib/types";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { CategoryType, EventSchema, EventType, PriceClassType } from "@/lib/types";
+import { SubmitHandler, useForm, Controller, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { api } from "@/lib/axios";
-import { LocationType } from '../../../../lib/types';
+import { LocationType, PriceClass } from '../../../../lib/types';
 import { useEffect, useState } from "react";
 import { Endpoint, fetchFromApi } from "@/lib/utils";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
@@ -18,7 +18,11 @@ import { CalendarIcon } from "@/components/icons";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-
+import { TrashIcon } from "@/components/icons";
+import { FilePenIcon } from "lucide-react";
+import { Table, TableCell, TableRow, TableHead, TableHeader, TableBody } from "@/components/ui/table";
+import EditPriceDialog from "@/components/EditPriceDialog";
+import { DeleteDialog } from "@/components/DeleteDialog";
 type FetchedData = {
     categories: { msg: string, data: CategoryType[] | [] };
     locations: { msg: string, data: LocationType[] | [] };
@@ -32,6 +36,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
         event: { msg: "", data: null }
     });
     const router = useRouter();
+
     const { register, handleSubmit, control, formState: { errors }, watch, reset } = useForm<EventType>({
         resolver: zodResolver(EventSchema),
         defaultValues: {
@@ -44,6 +49,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
         }
     });
 
+    const { fields, append, prepend, remove, swap, move, insert } = useFieldArray({ control, name: 'priceclass' })
     useEffect(() => {
         const endPoints: Endpoint<FetchedData>[] = [
             { key: 'locations', url: 'location' },
@@ -64,6 +70,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                     categoryId: data.event.data.categoryId,
                     description: data.event.data.description,
                     date: new Date(data.event.data.date),
+                    capacity: data.event.data.capacity
                 });
             }
         });
@@ -95,13 +102,20 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
     }
 
     const { locations, categories, event } = utilData;
-
+    const handleCancel = () => {
+        return router.back();
+    }
     return (
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
             <div className="flex items-center justify-between">
                 <div className="space-y-1">
                     <h1 className="text-2xl font-bold">{eventId ? "Edit Event" : "Add Event"}</h1>
                     <p className="text-gray-500 dark:text-gray-400">{eventId ? "Edit the event details." : "Create a new event for your organization."}</p>
+                </div>
+                <div className="flex gap-2">
+                    <Button variant="outline" size="lg" onClick={handleCancel}>
+                        Close
+                    </Button>
                 </div>
             </div>
             <div className="border shadow-sm rounded-lg">
@@ -114,6 +128,13 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                     <div className="grid gap-2">
                         <Label htmlFor="description">Event Description</Label>
                         <Textarea id="description" placeholder="Enter event description" {...register('description')} />
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="capacity">Capacity</Label>
+                        <Input id="capacity" type="number" placeholder="Enter capacity" {...register('capacity', {
+                            valueAsNumber: true
+                        })} />
+                        {errors.capacity && <p className="text-red-500">{errors.capacity.message}</p>}
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="event-date">Event Date</Label>
@@ -197,6 +218,43 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                         <Label htmlFor="venue">Venue</Label>
                         <Input id="venue" placeholder="Enter Venue" {...register('venue')} />
                         {errors.venue && <p className="text-red-500">{errors.venue.message}</p>}
+                    </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="priceClasses">Price Classes</Label>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Name</TableHead>
+                                    <TableHead>Price</TableHead>
+                                    <TableHead>Actions</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+
+                                {
+                                    !event?.data?.priceclass || event.data.length == 0 ? <TableRow>
+                                        <TableCell colSpan={6} className='text-center'>No data to show</TableCell>
+                                    </TableRow> : event?.data?.priceclass?.map((price: PriceClassType) => {
+                                        return <TableRow key={price.id}>
+                                            <TableCell>
+                                                {price.name}
+                                            </TableCell>
+                                            <TableCell>
+                                                {price.price}
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex gap-2">
+
+                                                    <EditPriceDialog />
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    }
+                                    )
+                                }
+                            </TableBody>
+                        </Table>
+                        <EditPriceDialog type="CREATE" />
                     </div>
                     <div className="flex justify-end">
                         <Button type="submit">{eventId ? "Update Event" : "Create Event"}</Button>
