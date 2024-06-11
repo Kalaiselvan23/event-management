@@ -9,6 +9,7 @@ import CreateEventDialog from '@/components/CreateEventDialog';
 import { DeleteDialog } from '@/components/DeleteDialog';
 import { EventType, CategoryType, LocationType } from '@/lib/types';
 import { Endpoint, fetchFromApi } from '@/lib/utils';
+import Link from 'next/link';
 
 type FetchedData = {
     events: { msg: string, data: EventType[] };
@@ -61,7 +62,10 @@ const Page = async ({ searchParams: { categoryId, locationId } }: { searchParams
                                 </DropdownMenuRadioGroup>
                             </PopoverContent>
                         </Popover>
-                        <CreateEventDialog categories={categories?.data} locations={locations?.data} type="CREATE" />
+                        <Link href={"/admin/events/update"} className="ml-auto flex items-center">
+                            <PlusIcon className="h-4 w-4 mr-2" />
+                            <span>Create Event</span>
+                        </Link>
                     </div>
 
                     <Table>
@@ -86,7 +90,9 @@ const Page = async ({ searchParams: { categoryId, locationId } }: { searchParams
                                     <TableCell>980</TableCell>
                                     <TableCell>$98,000</TableCell>
                                     <TableCell className="flex gap-2">
-                                        <CreateEventDialog event={event} locations={locations?.data} categories={categories?.data} type="EDIT" />
+                                        <Link href={`/admin/events/update?eventId=${event.id}`} className="ml-auto flex items-center">
+                                            <span>Update</span>
+                                        </Link>
                                         <DeleteDialog url='/events' data={event} />
                                     </TableCell>
                                 </TableRow>
