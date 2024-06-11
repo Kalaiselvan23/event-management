@@ -1,5 +1,11 @@
-import {string, z} from "zod"
+import {any, string, z} from "zod"
 const paymentEnum=z.enum(["CC","PAYPAL","APPLEPAY"])
+export const PriceClass=z.object({
+    id:z.string().optional(),
+    name:z.string(),
+    price:z.number().min(0).max(100000,'Maximum should be 100000'),
+    eventId:z.string(),
+})
 export const EventSchema=z.object({
     id:z.string().uuid().optional(),
     name:z.string(),
@@ -8,9 +14,10 @@ export const EventSchema=z.object({
     description:z.string(),
     locationId:z.string(),
     venue:z.string().min(2).max(15),
-    ticket:z.array(z.any()).optional(),
+    ticket:z.array(PriceClass).optional(),
     priceclass:z.array(z.any()).optional(),
     users:z.array(z.any()).optional(),
+    capacity:z.number().min(1,'Minimum 1 should be the capacity').max(1000000,'Maximum capacity is 10000'),
     createdAt:z.date().optional(),
 })
 
@@ -31,8 +38,19 @@ export const PaymentSchema=z.object({
     eventId:z.string().uuid(),
     ticketPrice:z.number(),
 })
+const eventStatusEnum=z.enum(['all','upcoming','past'] as const)
+export const EventFilterSchema = z.object({
+    eventDate: z.object({
+        from: z.date().optional(),
+        to: z.date().optional()
+    }),
+    categoryId: z.string().optional(),
+    locationId:z.string().optional(),
+    eventStatus: eventStatusEnum
+})
 //ts exports
 export type EventType=z.infer<typeof EventSchema>
 export type CategoryType=z.infer<typeof CategorySchema>
 export type LocationType=z.infer<typeof LocationSchema>
 export type PaymentType=z.infer<typeof PaymentSchema>
+export type EventFilterType=z.infer<typeof EventFilterSchema>
