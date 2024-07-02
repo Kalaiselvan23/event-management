@@ -50,11 +50,11 @@ const Header =  () => {
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
+                {session.user.role==="ADMIN" ? <Link href={"/admin/dashboard"}>Admin Panel</Link>:null}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
                   <Link href={"/api/auth/signout"}>Logout</Link>
+                
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> :

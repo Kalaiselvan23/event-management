@@ -1,7 +1,8 @@
 import {any, string, z} from "zod"
 import NextAuth from "next-auth/next"
-import { User } from "@prisma/client"
+import { Role, User } from "@prisma/client"
 import { JWT } from "next-auth/jwt"
+import { DefaultSession, DefaultUser } from "next-auth"
 const paymentEnum=z.enum(["CC","PAYPAL","APPLEPAY"])
 export const PriceClassSchema=z.object({
     id:z.string().optional(),
@@ -77,5 +78,7 @@ declare module 'next-auth'{
     
 }
 declare module 'next-auth/jwt'{
+    // @ts-ignore
     type JWT=User
 }
+

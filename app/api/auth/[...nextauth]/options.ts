@@ -6,6 +6,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
 import { AuthOptions } from "next-auth";
 import { Adapter } from "next-auth/adapters";
+import async from '../../../(main)/page';
 export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma) as Adapter,
   providers: [
@@ -40,19 +41,23 @@ export const authOptions: AuthOptions = {
           },
         });
         console.log(user)
-        if (user) return user;
+        if (user) return {...user};
         return null;
       },
     }),
   ],
-  secret: process.env.NEXT_SECRET,
+  secret: process.env.NEXT_SECRET as string,
   session: {
     strategy: "jwt",
     maxAge: 1 * 24 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {
+      console.log("user",user)
+      console.log("token",token)
       if (user) {
+        // @ts-ignore
+        token.role=user.role;
         token.id = user.id;
       }
       return { ...token, user };
