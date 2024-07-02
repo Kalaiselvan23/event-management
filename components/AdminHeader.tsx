@@ -4,6 +4,7 @@ import { Input } from './ui/input'
 import { DropdownMenu,DropdownMenuTrigger,DropdownMenuItem,DropdownMenuLabel,DropdownMenuSeparator,DropdownMenuContent} from './ui/dropdown-menu'
 import { Button } from './ui/button'
 import { CalendarIcon,SearchIcon} from './icons'
+import Image from 'next/image'
 const AdminHeader = () => {
   return (
     <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
@@ -30,7 +31,7 @@ const AdminHeader = () => {
                 size="icon"
                 variant="ghost"
               >
-                <img
+                <Image
                   alt="Avatar"
                   className="rounded-full"
                   height="32"

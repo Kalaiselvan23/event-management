@@ -11,7 +11,6 @@ import EventCard from "@/components/EventCard"
 import { CategoryType, EventType, LocationType } from "@/lib/types"
 import { Endpoint, fetchFromApi } from "@/lib/utils"
 import { Suspense } from "react"
-import { SkeletonCard } from '../../../components/SkeletonCard';
 import {Triangle} from "react-loader-spinner"
 type FetchedData = {
     events: { msg: string, data: EventType[] };
@@ -56,7 +55,7 @@ export default async function Component() {
                                 <SelectGroup>
                                     <SelectLabel>Catgories</SelectLabel>
                                     {categories?.data && categories?.data.map((category: CategoryType) => {
-                                        return <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                                        return <SelectItem key={category.id} value={category.id || ""}>{category.name}</SelectItem>
 
                                     })}
 

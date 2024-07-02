@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CategoryType, EventSchema, EventType, PriceClassType } from "@/lib/types";
+import { CategoryType, EventSchema, EventType, LocationType, PriceClassType } from "@/lib/types";
 import { SubmitHandler, useForm, Controller, useFieldArray } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
@@ -61,6 +61,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
         }
 
         fetchFromApi(endPoints).then(data => {
+            // @ts-ignore
             setUtilData(data);
             console.log(data.event?.data)
             if (data.event?.data) {
@@ -70,8 +71,9 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                     locationId: data.event.data.locationId,
                     categoryId: data.event.data.categoryId,
                     description: data.event.data.description,
-                    date: new Date(data.event.data.date),
+                    date: new Date(data.event.data.date as Date),
                     capacity: data.event.data.capacity,
+                    //@ts-ignore
                     priceclass: [...data.event?.data?.priceclass]
                 });
             }
@@ -79,7 +81,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
     }, [eventId, reset]);
 
     const onSubmit: SubmitHandler<EventType> = async (data: EventType) => {
-        data.date = new Date(data.date);
+        data.date = new Date(data.date as Date);
         try {
             const response = eventId
                 ? await api.put(`/events/update?eventId=${eventId}`, data)
@@ -150,7 +152,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                                     )}
                                 >
                                     <CalendarIcon className="mr-2 h-4 w-4" />
-                                    {watch('date') ? format(new Date(watch('date')), "PPP") : <span>Pick a date</span>}
+                                    {watch('date') ? format(new Date(watch('date') as Date), "PPP") : <span>Pick a date</span>}
                                 </Button>
                             </PopoverTrigger>
                             <PopoverContent className="w-auto p-0">
@@ -185,7 +187,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                                     </SelectTrigger>
                                     <SelectContent>
                                         {locations.data && locations.data.map((location: LocationType) => (
-                                            <SelectItem key={location.id} value={location.id}>{location.name}</SelectItem>
+                                            <SelectItem key={location.id} value={location.id || ""}>{location.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
@@ -208,7 +210,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                                     </SelectTrigger>
                                     <SelectContent>
                                         {categories.data && categories.data.map((category: CategoryType) => (
-                                            <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                                            <SelectItem key={category.id} value={category.id  || ""}>{category.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>

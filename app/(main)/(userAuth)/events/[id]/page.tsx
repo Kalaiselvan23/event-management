@@ -23,7 +23,8 @@ const {event}=await fetchFromApi(endPoints);
                 <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none">
                  {event?.data?.name}
                 </h1>
-                <p className="text-gray-500 md:text-xl dark:text-gray-400">{new Date(event?.data?.date).toLocaleString()} | {`${event?.data?.venue} , ${event?.data?.location.name}`}</p>
+                {/* @ts-ignore */}
+                <p className="text-gray-500 md:text-xl dark:text-gray-400">{new Date(event?.data?.date as Date).toLocaleString()} | {`${event?.data?.venue} , ${event?.data?.location?.name}`}</p>
               </div>
               <div className="space-y-4">
                 <div className="inline-block rounded-lg bg-gray-100 px-3 py-1 text-sm dark:bg-gray-800">

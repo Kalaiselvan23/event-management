@@ -40,7 +40,7 @@ const CreateEventDialog = ({ locations, categories, type, event }: propsType) =>
   });
   const [openDialog, setOpenDialog] = useState<boolean>(false);
   const onSubmit: SubmitHandler<EventType> = async (data: EventType) => {
-    data.date = new Date(data.date);
+    data.date = new Date(data.date as Date);
     if (event) {
       const res = await api.put(`/events/update?eventId=${event.id}`, data)
       const responseData = await res.data
@@ -111,7 +111,7 @@ const CreateEventDialog = ({ locations, categories, type, event }: propsType) =>
                         </SelectTrigger>
                         <SelectContent>
                           {locations.length > 0 && locations.map((location: LocationType) => (
-                            <SelectItem key={location.id} value={location.id}>{location.name}</SelectItem>
+                            <SelectItem key={location.id} value={location.id || ""}>{location.name}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -141,7 +141,7 @@ const CreateEventDialog = ({ locations, categories, type, event }: propsType) =>
                         )}
                       >
                         <CalendarIcon className="mr-2 h-4 w-4" />
-                        {watch('date') ? format(watch('date'), "PPP") : <span>Pick a date</span>}
+                        {watch('date') ? format(watch('date') as Date, "PPP") : <span>Pick a date</span>}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0">
@@ -178,7 +178,7 @@ const CreateEventDialog = ({ locations, categories, type, event }: propsType) =>
                         </SelectTrigger>
                         <SelectContent>
                           {categories.length > 0 && categories.map((category: CategoryType) => (
-                            <SelectItem key={category.id} value={category.id}>{category.name}</SelectItem>
+                            <SelectItem key={category.id} value={category.id || ""}>{category.name}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>

@@ -91,7 +91,7 @@ export default function Component() {
   )
 }
 
-function CalendarIcon(props) {
+function CalendarIcon(props:any) {
   return (
     <svg
       {...props}

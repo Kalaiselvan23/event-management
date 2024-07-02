@@ -20,7 +20,7 @@ export const DataTable = ({events}:{events:EventType[]}) => {
       {events?.map((event: EventType) => {
         return <TableRow key={event.id}>
           <TableCell className="font-medium">{event.name}</TableCell>
-          <TableCell>{new Date(event.date).toString()}</TableCell>
+          <TableCell>{new Date(event.date as Date).toString()}</TableCell>
           <TableCell>1,024</TableCell>
           <TableCell>980</TableCell>
           <TableCell>$98,000</TableCell>

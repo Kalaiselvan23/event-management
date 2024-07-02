@@ -18,7 +18,7 @@ import { useRouter } from 'next/navigation'
 
 type PropsType = {
     categories: CategoryType[],
-    locations: LocationType[],
+    locations: LocationType[] ,
 }
 
 const EventFilterBox = ({ categories, locations }: PropsType) => {
@@ -82,11 +82,12 @@ const EventFilterBox = ({ categories, locations }: PropsType) => {
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-auto p-0" align="start">
+                                            {/* @ts-ignore */}
                                             <Calendar
                                                 initialFocus
                                                 mode="range"
                                                 defaultMonth={field.value.from}
-                                                selected={field.value}
+                                                selected={field.value as Date}
                                                 onSelect={field.onChange}
                                                 numberOfMonths={2}
                                             />
@@ -110,7 +111,7 @@ const EventFilterBox = ({ categories, locations }: PropsType) => {
                                         </SelectTrigger>
                                         <SelectContent>
                                             {categories.length > 0 && categories.map((category) => (
-                                                <SelectItem key={category.id} value={category.id}>
+                                                <SelectItem key={category.id as string} value={category.id as string}>
                                                     {category.name}
                                                 </SelectItem>
                                             ))}
@@ -125,7 +126,7 @@ const EventFilterBox = ({ categories, locations }: PropsType) => {
                                 control={control}
                                 name="eventStatus"
                                 render={({ field }) => (
-                                    <Select id="event-status" onValueChange={field.onChange} value={field.value}>
+                                    <Select onValueChange={field.onChange} value={field.value}>
                                         <SelectTrigger className="w-full">
                                             <SelectValue placeholder="Select event status" />
                                         </SelectTrigger>

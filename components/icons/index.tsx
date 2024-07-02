@@ -26,7 +26,7 @@ export function CalendarDaysIcon(props: any) {
   )
 }
 
-export function TrashIcon(props) {
+export function TrashIcon(props:any) {
   return (
     <svg
       {...props}
@@ -46,7 +46,7 @@ export function TrashIcon(props) {
     </svg>
   )
 }
-export function DeleteIcon(props) {
+export function DeleteIcon(props:any) {
   return (
     <svg
       {...props}
@@ -90,7 +90,7 @@ export function LocateIcon(props: any) {
   )
 }
 
-export function FilterIcon(props) {
+export function FilterIcon(props:any) {
   return (
     <svg
       {...props}
@@ -109,7 +109,7 @@ export function FilterIcon(props) {
   )
 }
 
-export function SearchIcon(props) {
+export function SearchIcon(props:any) {
   return (
     <svg
       {...props}
@@ -129,7 +129,7 @@ export function SearchIcon(props) {
   )
 }
 
-export function SettingsIcon(props) {
+export function SettingsIcon(props:any) {
   return (
     <svg
       {...props}
@@ -148,7 +148,7 @@ export function SettingsIcon(props) {
     </svg>
   )
 }
-export function TicketIcon(props) {
+export function TicketIcon(props:any) {
   return (
     <svg
       {...props}
@@ -169,7 +169,7 @@ export function TicketIcon(props) {
     </svg>
   )
 }
-export function UsersIcon(props) {
+export function UsersIcon(props:any) {
   return (
     <svg
       {...props}
@@ -191,7 +191,7 @@ export function UsersIcon(props) {
   )
 }
 
-export function CalendarIcon(props) {
+export function CalendarIcon(props:any) {
   return (
     <svg
       {...props}
@@ -213,7 +213,7 @@ export function CalendarIcon(props) {
   )
 }
 
-export function BellIcon(props) {
+export function BellIcon(props:any) {
   return (
     <svg
       {...props}
@@ -233,7 +233,7 @@ export function BellIcon(props) {
   )
 }
 
-export function ListIcon(props) {
+export function ListIcon(props:any) {
   return (
     <svg
       {...props}
@@ -258,7 +258,7 @@ export function ListIcon(props) {
 }
 
 
-export function PlusIcon(props) {
+export function PlusIcon(props:any) {
   return (
     <svg
       {...props}

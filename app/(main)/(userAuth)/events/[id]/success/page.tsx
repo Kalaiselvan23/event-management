@@ -40,7 +40,7 @@ export default function Component() {
   )
 }
 
-function CheckIcon(props) {
+function CheckIcon(props:any) {
   return (
     <svg
       {...props}

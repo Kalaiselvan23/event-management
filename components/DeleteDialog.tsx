@@ -17,7 +17,7 @@ import { error } from "console"
 import { useRouter } from "next/navigation"
 import toast from "react-hot-toast"
 
-export function DeleteDialog({ data, url }: { data: CategoryType | EventType, url: string }) {
+export function DeleteDialog({ data, url }: { data: CategoryType | EventType, url?: string }) {
   const router=useRouter();
   const deleteEvent = async (id: string, url: string) => {
     const response = await deleteFromApi(id, url)
@@ -41,7 +41,7 @@ export function DeleteDialog({ data, url }: { data: CategoryType | EventType, ur
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={() => deleteEvent(data?.id, url)}>Delete</AlertDialogAction>
+          <AlertDialogAction onClick={() => deleteEvent(data?.id as string, url as string)}>Delete</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

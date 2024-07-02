@@ -41,7 +41,7 @@ const Page = async ({ searchParams: { categoryId, locationId } }: { searchParams
             <div className="flex w-full md:flex-row gap-4">
                 <div className="border w-full shadow-sm rounded-lg">
                     <div className="p-4 border-b flex items-center gap-4">
-                        <EventFilterBox locations={locations?.data} categories={categories?.data} />
+                        <EventFilterBox locations={locations?.data || []} categories={categories?.data || []} />
                         <Popover>
                             <PopoverTrigger asChild>
                                 <Button className="flex items-center gap-2" variant="outline">
@@ -81,7 +81,7 @@ const Page = async ({ searchParams: { categoryId, locationId } }: { searchParams
                             </TableRow> : events?.data?.map((event: EventType) => {
                                 return <TableRow key={event.id}>
                                     <TableCell className="font-medium">{event.name}</TableCell>
-                                    <TableCell>{new Date(event.date).toString()}</TableCell>
+                                    <TableCell>{new Date(event.date as Date).toString()}</TableCell>
                                     <TableCell>1,024</TableCell>
                                     <TableCell>980</TableCell>
                                     <TableCell>$98,000</TableCell>

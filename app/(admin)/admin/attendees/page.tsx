@@ -14,7 +14,7 @@ const Page = () => {
               <h1 className="text-2xl font-bold">Attendees</h1>
               <p className="text-gray-500 dark:text-gray-400">Manage and view all event attendees.</p>
             </div>
-            <Button variant="primary">
+            <Button>
               <PlusIcon className="h-4 w-4 mr-2" />
               Add Attendee
             </Button>
@@ -70,7 +70,7 @@ const Page = () => {
                     <TableCell>Annual Conference 2023</TableCell>
                     <TableCell>2</TableCell>
                     <TableCell>
-                      <Badge variant="success">Yes</Badge>
+                      <Badge>Yes</Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -91,7 +91,7 @@ const Page = () => {
                     <TableCell>Product Launch Event</TableCell>
                     <TableCell>1</TableCell>
                     <TableCell>
-                      <Badge variant="danger">No</Badge>
+                      <Badge>No</Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -112,7 +112,7 @@ const Page = () => {
                     <TableCell>Developer Meetup</TableCell>
                     <TableCell>3</TableCell>
                     <TableCell>
-                      <Badge variant="success">Yes</Badge>
+                      <Badge >Yes</Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ const Page = () => {
                     <TableCell>Marketing Workshop</TableCell>
                     <TableCell>1</TableCell>
                     <TableCell>
-                      <Badge variant="success">Yes</Badge>
+                      <Badge>Yes</Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -154,7 +154,7 @@ const Page = () => {
                     <TableCell>Sales Kickoff</TableCell>
                     <TableCell>2</TableCell>
                     <TableCell>
-                      <Badge variant="danger">No</Badge>
+                      <Badge>No</Badge>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

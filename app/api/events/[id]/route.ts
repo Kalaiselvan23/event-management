@@ -1,9 +1,9 @@
 import prisma from "@/lib/prisma";
-import { NextApiRequest, NextApiResponse } from "next";
-export const GET = async (request: NextApiRequest, { params }: any) => {
+import { NextApiResponse } from "next";
+import { NextRequest } from "next/server";
+export const GET = async (request: NextRequest, { params }: any) => {
   const { id } = params;
   try {
-    // const data:CategoryType[]=await prisma.$queryRaw`select "Events".*,"Location".name as "locationName" from "Events" inner join "Location" on "Events"."locationId"="Location".id where "Events".id=${id}`
     const data = await prisma.events.findUnique({
       where: {
         id,

@@ -175,7 +175,7 @@ function MountainIcon(props: any) {
 }
 
 
-function SparklesIcon(props) {
+function SparklesIcon(props:any) {
   return (
     <svg
       {...props}
@@ -199,7 +199,7 @@ function SparklesIcon(props) {
 }
 
 
-function UsersIcon(props) {
+function UsersIcon(props:any) {
   return (
     <svg
       {...props}

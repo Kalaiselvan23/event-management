@@ -133,7 +133,7 @@ export default function BuyForm({ event, user }: any) {
                                         <RadioGroup className="flex" value={field.value} onValueChange={field.onChange}>
                                             {event?.priceclass && event?.priceclass.map((price: PriceClassType) => (
                                                 <div key={price?.id} className="flex items-center space-x-2">
-                                                    <RadioGroupItem value={price.id} id={price.id} />
+                                                    <RadioGroupItem value={price.id || ""} id={price.id} />
                                                     <Label htmlFor={price.id}>{price.name}</Label>
                                                 </div>
                                             ))}

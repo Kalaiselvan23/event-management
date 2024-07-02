@@ -60,7 +60,7 @@ const CreateCategoryDialog = ({ type, category }: propsType) => {
                 <DialogHeader>
                     <DialogTitle>Edit Category</DialogTitle>
                     <DialogDescription>
-                        Make changes to category here. Click save when you're done.
+                        Make changes to category here. Click save when you &apos; re done.
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit(onSubmit)}>
