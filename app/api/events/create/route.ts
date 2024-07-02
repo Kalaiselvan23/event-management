@@ -3,13 +3,13 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { z, string } from "zod";
 import { EventSchema } from "../../../../lib/types";
 import { formatDate } from "@/lib/utils";
-import Page from "../../../admin/event-categories/page";
+import Page from "../../../(admin)/admin/event-categories/page";
 export const POST = async (request: Request) => {
   try {
     const event = await request.json();
     event.date = new Date(event.date);
     EventSchema.parse(event);
-    const { name, description, date, venue } = event;
+    const { name, description, date, venue,priceClass} = event;
     const locationId: string = event.locationId;
     const categoryId: string = event.categoryId;
     const formattedDate = date.toISOString();
@@ -24,14 +24,19 @@ export const POST = async (request: Request) => {
           },
         },
         venue,
-        categories:{
-          create:{
-            category:{
-              connect:{
-                id:categoryId
-              }
-            }
-          }
+        categories: {
+          create: {
+            category: {
+              connect: {
+                id: categoryId,
+              },
+            },
+          },
+        },
+        priceclass:{
+          create:[
+            ...priceClass
+          ]
         }
       },
     });

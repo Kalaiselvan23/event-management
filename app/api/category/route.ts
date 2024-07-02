@@ -18,9 +18,26 @@ export const GET = async () => {
         }
       }
     });
-    console.log(categories);
-    return NextResponse.json(categories);
+    return NextResponse.json({
+      msg:"Successfully fetched Events",
+      data:categories
+    });
   } catch (err) {
-    return NextResponse.json(err);
+    return NextResponse.json(err,{
+      status:500,
+    });
+  }
+};
+export const DELETE = async (request: Request) => {
+  try {
+    const { id } = await request.json();
+    const category = await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+    return Response.json({ msg: "Category Deleted Successfully", data: category });
+  } catch (err) {
+    return Response.json(err, { status: 500 });
   }
 };

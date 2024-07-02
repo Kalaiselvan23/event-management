@@ -33,7 +33,6 @@ const EventFilterBox = ({ categories, locations }: PropsType) => {
     });
 
     const onSubmit: SubmitHandler<EventFilterType> = async (formData:EventFilterType) => {
-        console.log('Filter applied');
         router.push(`/admin/events?categoryId=${formData.categoryId}&status=${formData.eventStatus}&from=${formData.eventDate.from}&to=${formData.eventDate.to}`)
     };
     const clearFilter=(event:any):void=>{

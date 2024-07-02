@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const useFetch = (urls) => {
+const useFetch = (urls:any) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,10 +14,10 @@ const useFetch = (urls) => {
           setLoading(true);
           const responses = await Promise.all(urls.map((url:string)=> axios.get(url)));
           const fetchedData = responses.map(response => response.data);
-          setData(fetchedData);
+          setData(fetchedData as any);
         }
       } catch (error) {
-        setError(error);
+        setError(error as any);
       } finally {
         setLoading(false);
       }

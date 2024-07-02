@@ -27,7 +27,6 @@ const CreateCategoryDialog = ({ type, category }: propsType) => {
     })
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const onSubmit: SubmitHandler<CategoryType> = async (data: CategoryType) => {
-        console.log(data)
         if (category) {
             const res = await api.put(`/events/update?categoryId=${category.id}`, data)
             const responseData = await res.data
@@ -49,7 +48,6 @@ const CreateCategoryDialog = ({ type, category }: propsType) => {
             setOpenDialog(false);
         }
     }
-    console.log(watch('name'))
     return (
         <Dialog open={openDialog} onOpenChange={setOpenDialog}>
             <DialogTrigger asChild>

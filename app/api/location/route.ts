@@ -3,8 +3,10 @@ import prisma from "@/lib/prisma"
 export const GET=async()=>{
     try{
         const locations=await prisma.$queryRaw`SELECT * FROM "Location"`
-        console.log(locations); 
-        return Response.json(locations);
+        return Response.json({
+            msg:"Location successfully fetched",
+            data:locations
+        });
     }
     catch(err)
     {

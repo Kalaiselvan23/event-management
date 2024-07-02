@@ -1,47 +1,61 @@
 import prisma from "@/lib/prisma";
 import { NextApiRequest, NextApiResponse } from "next";
-import { formatDate } from '../../../lib/utils';
-export const GET = async (request: NextApiRequest) => {
+import { formatDate } from "../../../lib/utils";
+import { EventFilterSchema } from "@/lib/types";
+export const GET = async (request: Request) => {
   try {
-    const data =await prisma.$queryRaw`select "Events".*,"Location".name as "locationName" from "Events" inner join "Location" on "Events"."locationId"="Location".id;`;
-    console.log(data)
-    return Response.json(data);
-  } catch {
-    return Response.json({
-      msg: "Unable to fetch event",
-    });
-  }
-};
-export const POST = async (request: Request) => {
-  try {
-    const { categoryId, fromDate, toDate } = await request.json();
-    const formattedFromDate = formatDate(fromDate)
-    const formattedToDate = formatDate(toDate);
-    const events = await prisma.$queryRaw`SELECT * FROM "Events"
-      WHERE "categoryId" = ${categoryId}
-      AND "date" > timestamp '${formattedFromDate}' AND "date" < timestamp'${formattedToDate}'`;
-    return Response.json(events);
+  const url = new URL(request.url);
+  const searchParams = new URLSearchParams(url.search);
+  const locationId = searchParams.get("locationId");
+  const categoryId = searchParams.get("categoryId");
+  const fromDate = searchParams.get("from");
+  const toDate = searchParams.get("to");
+  let data;
+    if (locationId || categoryId || fromDate || toDate) {
+      data = await prisma.events.findMany({
+        include: { location: true, categories: true },
+        where: {
+          ...(locationId && { location: { id: locationId } }),
+          ...(categoryId && { categories: { some: { categoryId } } }),
+          ...(fromDate || toDate
+            ? {
+                date: {
+                  ...(fromDate && { gte: fromDate }),
+                  ...(toDate && { lte: toDate }),
+                },
+              }
+            : {}),
+        },
+      });
+    } else {
+      data = await prisma.events.findMany({
+        include: {
+          location: true,
+          categories: true,
+          priceclass: true,
+        },
+      });
+    }
+    return Response.json({ msg: "Events Fetched Successfuly", data });
   } catch (err) {
     return Response.json({
-      msg: "Unable to post event",
+      msg: "Unable to fetch event",
+      err,
     });
   }
 };
 
-export const DELETE=async(request:Request)=>{
-  try{
-    const {id}=await request.json();
-    console.log(id)
-    const event=await prisma.events.delete({
-      where:{
-        id
-      }
-    })
-    console.log(event)
-    return Response.json({msg:"Event Deleted Successfully",data:event})
+
+export const DELETE = async (request: Request) => {
+  try {
+    const { id } = await request.json();
+    const event = await prisma.events.delete({
+      where: {
+        id,
+      },
+    });
+    return Response.json({ msg: "Event Deleted Successfully", data: event });
+  } catch (err) {
+    return Response.json(err, { status: 500 });
   }
-  catch(err)
-  {
-    return Response.json(err,{status:500});
-  }
-}
+};

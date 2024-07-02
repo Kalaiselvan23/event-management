@@ -1,3 +1,4 @@
+"use client"
 import React from 'react'
 import Link from 'next/link'
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu"
@@ -9,10 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { authOptions } from '@/lib/authOptions'
-import  getServerSession  from 'next-auth';
-const Header = async () => {
-  const session = await getServerSession(authOptions);
+import getServerSession from 'next-auth';
+import { authOptions } from '@/app/api/auth/[...nextauth]/options'
+import { redirect } from 'next/navigation'
+import Image from 'next/image'
+import { useSession } from 'next-auth/react'
+const Header =  () => {
+  const {data:session,status}=useSession();
   return (
     <div>
       <header className="w-full bg-gray-900 text-gray-50 dark:bg-gray-950 dark:text-gray-50 shadow-md">
@@ -22,27 +26,18 @@ const Header = async () => {
               <MountainIcon className="h-6 w-6" />
               <span className="font-medium text-lg">Acme Events</span>
             </Link>
-            <Select>
-              <SelectTrigger className="w-[180px] text-black">
-                <SelectValue placeholder="Location" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="system">System</SelectItem>
-              </SelectContent>
-            </Select>
+
           </div>
-          <h3 className='text-white'>{session && JSON.stringify(session)}</h3>
+          {/* <h3 className='text-white'>{session?.user?JSON.stringify(session):'Not logged in'}</h3> */}
           <div className="flex items-center space-x-4">
-            {session?.user ? <DropdownMenu>
+            {session?.user? <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="rounded-full" size="icon" variant="ghost">
-                  <img
+                  <Image
                     alt="Avatar"
                     className="rounded-full"
                     height="36"
-                    src="/placeholder.svg"
+                    src={session?.user?.image || ""}
                     style={{
                       aspectRatio: "36/36",
                       objectFit: "cover",
@@ -63,7 +58,7 @@ const Header = async () => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu> :
-              <Link href={"/auth"} className="px-6 py-2 text-lg font-medium" size="md" variant="solid">
+              <Link href={"/auth"} className="px-6 py-2 text-lg font-medium" >
                 Sign Up
               </Link>
             }
@@ -76,7 +71,7 @@ const Header = async () => {
 
 export default Header
 
-function MountainIcon(props) {
+function MountainIcon(props:any) {
   return (
     <svg
       {...props}
