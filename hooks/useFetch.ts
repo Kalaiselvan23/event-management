@@ -12,8 +12,8 @@ const useFetch = (urls:any) => {
         // Check if data is already fetched
         if (data.length === 0) {
           setLoading(true);
-          const responses = await Promise.all(urls.map((url:string)=> axios.get(url)));
-          const fetchedData = responses.map(response => response.data);
+          const responses = await Promise.all(urls.map((url:string)=> fetch(url)));
+          const fetchedData = responses.map(response => response.json());
           setData(fetchedData as any);
         }
       } catch (error) {

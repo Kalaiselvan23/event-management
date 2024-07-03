@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import { TrashIcon } from "@/components/icons";
 import { FilePenIcon } from "lucide-react";
 import { Table, TableCell, TableRow, TableHead, TableHeader, TableBody } from "@/components/ui/table";
+import axios from "axios";
 
 type FetchedData = {
     categories: { msg: string, data: CategoryType[] | [] };
@@ -84,10 +85,22 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
         data.date = new Date(data.date as Date);
         try {
             const response = eventId
-                ? await api.put(`/events/update?eventId=${eventId}`, data)
-                : await api.post('/events/create', data);
+                ? await fetch(`/api/events/update?eventId=${eventId}`, {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                })
+                : await fetch('/api/events/create', {
+                    method: "POST",
+                    body: JSON.stringify(data),
+                    headers: {
+                        "Content-Type": "application/json",
+                    }
+                });
 
-            const responseData = await response.data;
+            const responseData = await response.json();
 
             if (responseData.err) {
                 toast.error(responseData.err);
@@ -210,7 +223,7 @@ const Page = ({ searchParams: { eventId } }: { searchParams: { eventId: string }
                                     </SelectTrigger>
                                     <SelectContent>
                                         {categories.data && categories.data.map((category: CategoryType) => (
-                                            <SelectItem key={category.id} value={category.id  || ""}>{category.name}</SelectItem>
+                                            <SelectItem key={category.id} value={category.id || ""}>{category.name}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>

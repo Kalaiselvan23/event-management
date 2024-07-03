@@ -30,10 +30,9 @@ export default async function Component({ params }: { params: { categoryId: stri
   const handleSubmit = (event: any) => {
     console.log(event.target.value)
   }
-  const endPoints: Endpoint<FetchedData>[] = [
+  const { events } = await fetchFromApi<FetchedData>([
     { key: 'events', url: 'events' },
-  ];
-  const { events } = await fetchFromApi<FetchedData>(endPoints);
+  ]);
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

@@ -19,12 +19,11 @@ type FetchedData = {
 };
 export default async function Component() {
 
-    const endPoints: Endpoint<FetchedData>[] = [
+    const { events, locations, categories } = await fetchFromApi([
         { key: 'locations', url: "location" },
         { key: 'events', url: 'events' },
         { key: 'categories', url: 'category' },
-    ];
-    const { events, locations, categories } = await fetchFromApi(endPoints);
+    ]);
     const loadFilter = async (formData: FormData) => {
         'use server'
         const rawFormData = {

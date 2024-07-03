@@ -8,6 +8,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { CategorySchema, CategoryType } from "@/lib/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { api } from "@/lib/axios"
+import axios from "axios"
 import { PlusIcon } from "./icons"
 import toast from "react-hot-toast"
 import { useState } from "react"
@@ -18,7 +19,7 @@ type propsType = {
     category?: CategoryType,
 }
 const CreateCategoryDialog = ({ type, category }: propsType) => {
-    const router=useRouter();
+    const router = useRouter();
     const { register, watch, handleSubmit, control, formState: { errors } } = useForm<CategoryType>({
         resolver: zodResolver(CategorySchema),
         defaultValues: {
@@ -28,8 +29,14 @@ const CreateCategoryDialog = ({ type, category }: propsType) => {
     const [openDialog, setOpenDialog] = useState<boolean>(false);
     const onSubmit: SubmitHandler<CategoryType> = async (data: CategoryType) => {
         if (category) {
-            const res = await api.put(`/events/update?categoryId=${category.id}`, data)
-            const responseData = await res.data
+            const res = await fetch(`/api/events/update?categoryId=${category.id}`, {
+                body: JSON.stringify(data),
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            const responseData = await res.json();
             if (responseData.err) {
                 toast.error(responseData.err);
             }
@@ -38,8 +45,14 @@ const CreateCategoryDialog = ({ type, category }: propsType) => {
             setOpenDialog(false);
         }
         else {
-            const res = await api.post('/category/create', data)
-            const responseData = await res.data
+            const res = await fetch('/api/category/create', {
+                body: JSON.stringify(data),
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            const responseData = await res.json();
             if (responseData.err) {
                 toast.error(responseData.err)
             }

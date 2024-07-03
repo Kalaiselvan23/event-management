@@ -13,6 +13,7 @@ import { PaymentSchema } from '@/lib/types';
 import toast from "react-hot-toast";
 import { api } from "@/lib/axios";
 import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function BuyForm({ event, user }: any) {
     const router = useRouter();
@@ -20,12 +21,20 @@ export default function BuyForm({ event, user }: any) {
         resolver: zodResolver(PaymentSchema)
     });
     const onSubmit: SubmitHandler<PaymentType> = async (formData: PaymentType) => {
-        const res = await api.post('/events/book-tickets', {
-            ...formData,
-            eventId: event?.id,
-            userId:user?.id,
-        })
-        const responseData = await res.data
+        const res = await fetch('/api/events/book-tickets',
+            {
+                method: "POST",
+                body: JSON.stringify({
+                    ...formData,
+                    eventId: event?.id,
+                    userId: user?.id,
+                }),
+                headers:{
+                    'Content-Type': 'application/json',
+                }
+            }
+        )
+        const responseData = await res.json()
         if (responseData.err) {
             toast.error(responseData.err)
         }

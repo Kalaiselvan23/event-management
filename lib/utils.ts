@@ -14,10 +14,11 @@ export async function fetchFromApi<T>(
 ): Promise<Partial<T>> {
   try {
     const fetchPromises = endpoints.map((endpoint) =>
-      fetch(`http://localhost:3000/api/${endpoint.url}`, {
+      fetch(`${process.env.BASE_URL}/api/${endpoint.url}`, {
         next: {
           revalidate:0,
         },
+        method:"GET",
       }).then((response) => response.json())
     );
 

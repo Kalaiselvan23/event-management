@@ -10,7 +10,7 @@ const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials, req) {
-        const res = await fetch("http://localhost:3000/api/signin", {
+        const res = await fetch(`/api/signin`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
